@@ -1,9 +1,7 @@
 from rest_framework import generics
-
-from .models import Movie, Actor
-from .serializers import ActorSerializer, MovieSerializer
 from .pagination import MoviesPagination
-
+from .serializers import MovieSerializer
+from core.models import Movie
 
 class BaseMovieAttr(generics.ListAPIView):
     serializer_class = MovieSerializer
@@ -35,13 +33,3 @@ class GenreMoviesListView(BaseMovieAttr):
         """Return objects for the genre"""
         genre = self.kwargs['genre']
         return Movie.g_movies.get_genre_m(genre).order_by('name')
-
-
-class ActorDetailView(generics.RetrieveAPIView):
-    """Actor information"""
-    serializer_class = ActorSerializer
-    lookup_field = 'id'
-
-    def get_queryset(self):
-        actor_id = self.kwargs['id']
-        return Actor.objects.filter(id=actor_id)

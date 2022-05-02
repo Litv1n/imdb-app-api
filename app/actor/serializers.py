@@ -2,15 +2,7 @@ from rest_framework import serializers
 
 from django.db.models import Count
 
-from .models import Movie, Actor
-
-
-class MovieSerializer(serializers.ModelSerializer):
-    """Serialize a movie"""
-
-    class Meta:
-        model = Movie
-        fields = '__all__'
+from core.models import Movie, Actor
 
 
 class ActorSerializer(serializers.ModelSerializer):
