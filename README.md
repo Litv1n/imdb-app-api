@@ -33,6 +33,7 @@ Fill the database with the data from .csv files:
 ```
 python manage.py fill_db queries/fill_db.sql
 ```
+Path ```queries/fill_db.sql``` is an argument that determines the way to the .sql file to fill the database.
 
 # Usage
 
