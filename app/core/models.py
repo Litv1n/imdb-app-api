@@ -26,7 +26,7 @@ class DirectorGenre(models.Model):
     prob = models.DecimalField(max_digits=10, decimal_places=4)
 
     def __str__(self):
-        return self.director.first_name
+        return f'{self.director.first_name}, {self.genre}'
 
 
 class Movie(models.Model):
@@ -48,7 +48,7 @@ class MovieGenre(models.Model):
     genre = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.genre
+        return f'{self.movie.name}, {self.genre}'
 
 
 class Role(models.Model):
