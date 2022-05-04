@@ -5,6 +5,21 @@ from django.db.models import Count
 from core.models import Movie, Actor
 
 
+def get_number_of_shared_movies(id_list: list) -> dict:
+    """Get number of shared movies"""
+    result = {}
+
+    for movie_id in id_list:
+        movie = Movie.objects.get(id=movie_id)
+        for role in movie.role_set.all():
+            if role.actor.id in result:
+                result[role.actor.id] += 1
+            else:
+                result.update({role.actor.id: 1})
+
+    return result
+
+
 class ActorSerializer(serializers.ModelSerializer):
     """Serializer for the actor objects"""
 
@@ -23,30 +38,22 @@ class ActorSerializer(serializers.ModelSerializer):
     )
 
     def get_most_frequent_partner(self, actor):
-        # movie_id_list = []
-        number_of_shared_movies = {}
-
         """Get the current actor"""
         actor = Actor.objects.get(id=actor.id)
         """Get all actor movies"""
         movie_id_list = [role.movie.id for role in actor.role_set.all()]
 
-        """Get number of shared movies with actor id"""
-        for movie_id in movie_id_list:
-            movie = Movie.objects.get(id=movie_id)
-            for role in movie.role_set.all():
-                if role.actor.id in number_of_shared_movies:
-                    number_of_shared_movies[role.actor.id] += 1
-                else:
-                    number_of_shared_movies.update({role.actor.id: 1})
+        number_of_shared_movies = get_number_of_shared_movies(movie_id_list)
 
         """Delete most common actor because it's current actor object"""
         del number_of_shared_movies[max(
-            number_of_shared_movies, key=number_of_shared_movies.get)]
+            number_of_shared_movies, key=number_of_shared_movies.get)
+        ]
 
         """Get most frequent partner Actor object"""
         most_frequent_partner = Actor.objects.get(
-            id=max(number_of_shared_movies, key=number_of_shared_movies.get))
+            id=max(number_of_shared_movies, key=number_of_shared_movies.get)
+        )
 
         result = {
             'partner_actor_id': most_frequent_partner.id,
