@@ -45,21 +45,24 @@ class ActorSerializer(serializers.ModelSerializer):
 
         number_of_shared_movies = get_number_of_shared_movies(movie_id_list)
 
-        """Delete most common actor because it's current actor object"""
-        del number_of_shared_movies[max(
-            number_of_shared_movies, key=number_of_shared_movies.get)
-        ]
-
-        """Get most frequent partner Actor object"""
-        most_frequent_partner = Actor.objects.get(
-            id=max(number_of_shared_movies, key=number_of_shared_movies.get)
-        )
-
-        result = {
-            'partner_actor_id': most_frequent_partner.id,
-            'partner_actor_name': f'{most_frequent_partner.first_name} {most_frequent_partner.last_name}',
-            'number_of_shared_movies': number_of_shared_movies[most_frequent_partner.id]
-        }
+        try:
+            """Delete most common actor because it's current actor object"""
+            del number_of_shared_movies[max(
+                number_of_shared_movies, key=number_of_shared_movies.get)
+            ]
+            """Get most frequent partner Actor object"""
+            most_frequent_partner = Actor.objects.get(
+                id=max(number_of_shared_movies,
+                       key=number_of_shared_movies.get
+                       )
+            )
+            result = {
+                'partner_actor_id': most_frequent_partner.id,
+                'partner_actor_name': f'{most_frequent_partner.first_name} {most_frequent_partner.last_name}',
+                'number_of_shared_movies': number_of_shared_movies[most_frequent_partner.id]
+            }
+        except ValueError:
+            result = 'No actor with shared movies'
 
         return result
 
