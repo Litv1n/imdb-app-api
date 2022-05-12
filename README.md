@@ -59,6 +59,7 @@ http://127.0.0.1:8000/api/movie/movies/?page=2&size=5
 
 This `url` will send you on the second page and make max elements per page as five.
 
+### Old filtering
 #### Movies by director:
 
 In the `url` path specify a director name. You must specify it using `d` as a key `d=director_name`. Example:
@@ -73,6 +74,22 @@ Same as a director name specify the genre using `g` as a key `g=genre_name`. Exa
 
 ```
 http://127.0.0.1:8000/api/movie/movies/g=Comedy
+```
+
+### Filtering through query_params
+#### Movies by director:
+
+In the `url` path specify a director name after ```?```. You must specify it using `director` as a key `director=director_name`. Example:
+
+```
+http://127.0.0.1:8000/api/movie/movies/?director=Ahmed
+```
+
+#### Movies by genre:
+Specify the genre after ```?``` using `genre` as a key `genre=genre_name`. Example:
+
+```
+http://127.0.0.1:8000/api/movie/movies/?genre=Comedy
 ```
 
 ### Actor
