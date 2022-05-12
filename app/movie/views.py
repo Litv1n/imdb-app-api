@@ -3,6 +3,7 @@ from .pagination import MoviesPagination
 from .serializers import MovieSerializer
 from core.models import Movie
 
+
 class BaseMovieAttr(generics.ListAPIView):
     serializer_class = MovieSerializer
     pagination_class = MoviesPagination
@@ -10,9 +11,21 @@ class BaseMovieAttr(generics.ListAPIView):
 
 class MovieListView(BaseMovieAttr):
     """List all movies"""
+    queryset = Movie.objects.select_related().all()
 
     def get_queryset(self):
-        return Movie.objects.select_related().all().order_by('name')
+        director = self.request.query_params.get('director')
+        genre = self.request.query_params.get('genre')
+        queryset = self.queryset
+        if director:
+            queryset = queryset.filter(
+                moviedirector__director__first_name=director
+            )
+        if genre:
+            queryset = queryset.filter(
+                moviegenre__genre=genre
+            )
+        return queryset.order_by('name')
 
 
 class DirectorMoviesListView(BaseMovieAttr):
