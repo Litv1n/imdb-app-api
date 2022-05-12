@@ -93,6 +93,12 @@ http://127.0.0.1:8000/api/actor/actor_stats/15000/
 
 Via this `url` you can see information about actor with `id=15000`
 
+### Tests
+Run all tests:
+```
+docker-compose run --rm app sh -c "python manage.py test"
+```
+
 # Additional information
 
 #### Data folder
